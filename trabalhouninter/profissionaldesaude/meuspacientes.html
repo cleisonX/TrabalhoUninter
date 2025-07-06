@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Meus Pacientes - VidaPlus</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: #f5f7fa;
+      color: #333;
+    }
+
+    .container {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      width: 250px;
+      background: linear-gradient(135deg, #1e5799 0%, #207cca 100%);
+      color: white;
+      padding: 20px 0;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .logo-img {
+      max-width: 100px;
+      margin-bottom: 10px;
+    }
+
+    .sidebar h2 {
+      font-size: 18px;
+      margin-bottom: 4px;
+    }
+
+    .sidebar p {
+      font-size: 13px;
+      line-height: 1.3;
+    }
+
+    .sidebar-menu {
+      margin-top: 30px;
+    }
+
+    .menu-item {
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .menu-item:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .menu-item i {
+      margin-right: 10px;
+    }
+
+    .menu-item.active {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .main-content {
+      flex: 1;
+      padding: 30px 40px;
+      overflow: auto;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+    }
+
+    .logout-btn {
+      background-color: #e74c3c;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .form-box {
+      background-color: white;
+      padding: 25px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      margin-bottom: 30px;
+    }
+
+    .form-box h3 {
+      margin-bottom: 15px;
+      color: #2c3e50;
+    }
+
+    .search-bar {
+      display: flex;
+      margin-bottom: 20px;
+    }
+
+    .search-bar input {
+      flex: 1;
+      padding: 10px 15px;
+      border: 1px solid #ddd;
+      border-radius: 6px 0 0 6px;
+    }
+
+    .search-bar button {
+      background-color: #207cca;
+      color: white;
+      border: none;
+      padding: 0 15px;
+      border-radius: 0 6px 6px 0;
+      cursor: pointer;
+    }
+
+    .pacientes-list {
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      overflow: hidden;
+    }
+
+    .paciente-item {
+      padding: 15px 20px;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .paciente-item:last-child {
+      border-bottom: none;
+    }
+
+    .paciente-info {
+      flex: 1;
+    }
+
+    .paciente-info h4 {
+      margin-bottom: 5px;
+      color: #2c3e50;
+    }
+
+    .paciente-info p {
+      color: #7f8c8d;
+      font-size: 14px;
+      margin: 3px 0;
+    }
+
+    .paciente-status {
+      display: flex;
+      align-items: center;
+    }
+
+    .status-badge {
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+      margin-right: 15px;
+    }
+
+    .status-estavel {
+      background-color: #d4edda;
+      color: #155724;
+    }
+
+    .status-grave {
+      background-color: #f8d7da;
+      color: #721c24;
+    }
+
+    .status-moderado {
+      background-color: #fff3cd;
+      color: #856404;
+    }
+
+    .paciente-actions a {
+      margin-left: 10px;
+      color: #207cca;
+      text-decoration: none;
+    }
+
+    .paciente-actions a:hover {
+      text-decoration: underline;
+    }
+
+    .btn {
+      border: none;
+      padding: 8px 15px;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-right: 10px;
+      font-size: 14px;
+    }
+
+    .btn-primary {
+      background-color: #207cca;
+      color: white;
+    }
+
+    .btn-secondary {
+      background-color: #6c757d;
+      color: white;
+    }
+
+    .btn-success {
+      background-color: #28a745;
+      color: white;
+    }
+
+    .btn-danger {
+      background-color: #dc3545;
+      color: white;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background-color: white;
+      width: 80%;
+      max-width: 600px;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .modal-header {
+      padding: 15px 20px;
+      background-color: #207cca;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-body {
+      padding: 20px;
+      max-height: 70vh;
+      overflow-y: auto;
+    }
+
+    .close-modal {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+
+    .leito-info {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+
+    .leito-info div {
+      flex: 1;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Menu lateral -->
+    <div class="sidebar">
+      <img src="vidaplus.png" alt="Logo VidaPlus" class="logo-img">
+      <h2>Vida Plus</h2>
+      <p>Gestão Hospitalar<br>e Serviços de Saúde</p>
+      <div class="sidebar-menu">
+        <div class="menu-item" onclick="window.location.href='agenda.html'"><i class="fas fa-calendar-alt"></i> Minha Agenda</div>
+        <div class="menu-item" onclick="window.location.href='receita.html'"><i class="fas fa-prescription-bottle-alt"></i> Receitas</div>
+        <div class="menu-item" onclick="window.location.href='prontuarios.html'"><i class="fas fa-notes-medical"></i> Prontuários</div>
+        <div class="menu-item active"><i class="fas fa-procedures"></i> Meus Pacientes</div>
+      </div>
+    </div>
+
+    <!-- Conteúdo principal -->
+    <div class="main-content">
+      <div class="header">
+        <h2>Meus Pacientes Internados</h2>
+        <button class="logout-btn" onclick="window.location.href='profissional.html'">
+          <i class="fas fa-chevron-left"></i> Voltar
+        </button>
+      </div>
+
+      <!-- Barra de pesquisa -->
+      <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Pesquisar pacientes por nome ou leito..." onkeyup="filtrarPacientes()">
+        <button><i class="fas fa-search"></i></button>
+      </div>
+
+      <!-- Botão para adicionar novo paciente -->
+      <button class="btn btn-primary" onclick="abrirModalNovoPaciente()">
+        <i class="fas fa-plus"></i> Adicionar Paciente
+      </button>
+
+      <!-- Lista de pacientes internados -->
+      <div class="form-box">
+        <h3><i class="fas fa-list"></i> Pacientes Ativos</h3>
+
+        <div class="pacientes-list" id="lista-pacientes">
+          <!-- Os pacientes serão carregados aqui via JavaScript -->
+          <p style="text-align: center; padding: 20px; color: #7f8c8d;">Carregando pacientes...</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para detalhes do paciente -->
+  <div class="modal" id="modal-paciente">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Detalhes do Paciente</h3>
+        <button class="close-modal" onclick="fecharModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Nome Completo</label>
+          <p id="modal-nome">Carregando...</p>
+        </div>
+
+        <div class="leito-info">
+          <div class="form-group">
+            <label>Número do Leito</label>
+            <p id="modal-leito">-</p>
+          </div>
+          <div class="form-group">
+            <label>Ala/Setor</label>
+            <p id="modal-ala">-</p>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Estado de Saúde</label>
+          <p id="modal-status">-</p>
+        </div>
+
+        <div class="form-group">
+          <label>Diagnóstico</label>
+          <p id="modal-diagnostico">-</p>
+        </div>
+
+        <div class="form-group">
+          <label>Data de Internação</label>
+          <p id="modal-internacao">-</p>
+        </div>
+
+        <div class="form-group">
+          <label>Observações</label>
+          <p id="modal-observacoes">Nenhuma observação registrada.</p>
+        </div>
+      </div>
+      <div style="padding: 15px; text-align: right; border-top: 1px solid #eee;">
+        <button class="btn btn-primary" onclick="editarPacienteModal()">
+          <i class="fas fa-edit"></i> Editar
+        </button>
+        <button class="btn btn-danger" onclick="fecharModal()">
+          <i class="fas fa-times"></i> Fechar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para adicionar/editar paciente -->
+  <div class="modal" id="modal-editar-paciente">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="modal-editar-titulo">Adicionar Novo Paciente</h3>
+        <button class="close-modal" onclick="fecharModalEditar()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="editar-nome">Nome Completo</label>
+          <input type="text" id="editar-nome" required>
+        </div>
+
+        <div class="leito-info">
+          <div class="form-group">
+            <label for="editar-leito">Número do Leito</label>
+            <input type="text" id="editar-leito" required>
+          </div>
+          <div class="form-group">
+            <label for="editar-ala">Ala/Setor</label>
+            <select id="editar-ala" required>
+              <option value="">Selecione</option>
+              <option value="Clínica Médica">Clínica Médica</option>
+              <option value="Pediatria">Pediatria</option>
+              <option value="UTI">UTI</option>
+              <option value="Cirurgia">Cirurgia</option>
+              <option value="Oncologia">Oncologia</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="editar-status">Estado de Saúde</label>
+          <select id="editar-status" required>
+            <option value="">Selecione</option>
+            <option value="Estável">Estável</option>
+            <option value="Moderado">Estado Moderado</option>
+            <option value="Grave">Grave</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="editar-diagnostico">Diagnóstico Principal</label>
+          <input type="text" id="editar-diagnostico" required>
+        </div>
+
+        <div class="form-group">
+          <label for="editar-internacao">Data de Internação</label>
+          <input type="date" id="editar-internacao" required>
+        </div>
+
+        <div class="form-group">
+          <label for="editar-observacoes">Observações</label>
+          <textarea id="editar-observacoes" rows="3"></textarea>
+        </div>
+      </div>
+      <div style="padding: 15px; text-align: right; border-top: 1px solid #eee;">
+        <button class="btn btn-secondary" onclick="fecharModalEditar()">
+          <i class="fas fa-times"></i> Cancelar
+        </button>
+        <button class="btn btn-primary" id="btn-salvar-paciente" onclick="salvarPaciente()">
+          <i class="fas fa-save"></i> Salvar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Variável para armazenar pacientes
+    let pacientes = JSON.parse(localStorage.getItem('pacientes')) || [];
+    let pacienteEditando = null;
+
+    // Carregar pacientes ao abrir a página
+    document.addEventListener('DOMContentLoaded', carregarPacientes);
+
+    // Função para carregar os pacientes na lista
+    function carregarPacientes() {
+      const lista = document.getElementById('lista-pacientes');
+      
+      if (pacientes.length === 0) {
+        lista.innerHTML = '<p style="text-align: center; padding: 20px; color: #7f8c8d;">Nenhum paciente internado no momento.</p>';
+        return;
+      }
+
+      let html = '';
+      
+      pacientes.forEach(paciente => {
+        // Determinar classe do status
+        let statusClass = '';
+        if (paciente.status === 'Estável') statusClass = 'status-estavel';
+        else if (paciente.status === 'Grave') statusClass = 'status-grave';
+        else statusClass = 'status-moderado';
+
+        html += `
+          <div class="paciente-item" data-id="${paciente.id}">
+            <div class="paciente-info">
+              <h4>${paciente.nome}</h4>
+              <p><i class="fas fa-bed"></i> Leito: ${paciente.leito} | ${paciente.ala}</p>
+              <p><i class="fas fa-calendar-alt"></i> Internado em: ${paciente.internacao}</p>
+            </div>
+            <div class="paciente-status">
+              <span class="status-badge ${statusClass}">${paciente.status}</span>
+            </div>
+            <div class="paciente-actions">
+              <a href="#" onclick="visualizarPaciente(${paciente.id})"><i class="fas fa-eye"></i> Detalhes</a>
+              <a href="#" onclick="editarPaciente(${paciente.id})"><i class="fas fa-edit"></i> Editar</a>
+              <a href="#" onclick="altaPaciente(${paciente.id})" style="color: #28a745;"><i class="fas fa-sign-out-alt"></i> Dar Alta</a>
+            </div>
+          </div>
+        `;
+      });
+
+      lista.innerHTML = html;
+    }
+
+    // Função para filtrar pacientes na pesquisa
+    function filtrarPacientes() {
+      const termo = document.getElementById('searchInput').value.toLowerCase();
+      const pacientes = document.querySelectorAll('.paciente-item');
+      
+      pacientes.forEach(paciente => {
+        const texto = paciente.textContent.toLowerCase();
+        if (texto.includes(termo)) {
+          paciente.style.display = 'flex';
+        } else {
+          paciente.style.display = 'none';
+        }
+      });
+    }
+
+    // Função para visualizar detalhes do paciente
+    function visualizarPaciente(id) {
+      const paciente = pacientes.find(p => p.id == id);
+      
+      if (!paciente) {
+        alert('Paciente não encontrado!');
+        return;
+      }
+
+      // Preencher modal com dados do paciente
+      document.getElementById('modal-nome').textContent = paciente.nome;
+      document.getElementById('modal-leito').textContent = paciente.leito;
+      document.getElementById('modal-ala').textContent = paciente.ala;
+      document.getElementById('modal-status').textContent = paciente.status;
+      document.getElementById('modal-diagnostico').textContent = paciente.diagnostico;
+      document.getElementById('modal-internacao').textContent = paciente.internacao;
+      document.getElementById('modal-observacoes').textContent = paciente.observacoes || 'Nenhuma observação registrada.';
+
+      // Mostrar modal
+      document.getElementById('modal-paciente').style.display = 'flex';
+    }
+
+    // Função para abrir modal de novo paciente
+    function abrirModalNovoPaciente() {
+      pacienteEditando = null;
+      document.getElementById('modal-editar-titulo').textContent = 'Adicionar Novo Paciente';
+      document.getElementById('btn-salvar-paciente').textContent = 'Salvar';
+      
+      // Limpar campos
+      document.getElementById('editar-nome').value = '';
+      document.getElementById('editar-leito').value = '';
+      document.getElementById('editar-ala').value = '';
+      document.getElementById('editar-status').value = '';
+      document.getElementById('editar-diagnostico').value = '';
+      document.getElementById('editar-internacao').value = '';
+      document.getElementById('editar-observacoes').value = '';
+      
+      // Definir data atual como padrão
+      const hoje = new Date().toISOString().split('T')[0];
+      document.getElementById('editar-internacao').value = hoje;
+      
+      document.getElementById('modal-editar-paciente').style.display = 'flex';
+    }
+
+    // Função para editar paciente
+    function editarPaciente(id) {
+      pacienteEditando = pacientes.find(p => p.id == id);
+      
+      if (!pacienteEditando) {
+        alert('Paciente não encontrado!');
+        return;
+      }
+
+      document.getElementById('modal-editar-titulo').textContent = 'Editar Paciente';
+      document.getElementById('btn-salvar-paciente').textContent = 'Atualizar';
+      
+      // Preencher campos com dados do paciente
+      document.getElementById('editar-nome').value = pacienteEditando.nome;
+      document.getElementById('editar-leito').value = pacienteEditando.leito;
+      document.getElementById('editar-ala').value = pacienteEditando.ala;
+      document.getElementById('editar-status').value = pacienteEditando.status;
+      document.getElementById('editar-diagnostico').value = pacienteEditando.diagnostico;
+      document.getElementById('editar-internacao').value = pacienteEditando.internacaoISO;
+      document.getElementById('editar-observacoes').value = pacienteEditando.observacoes || '';
+      
+      document.getElementById('modal-editar-paciente').style.display = 'flex';
+    }
+
+    // Função para salvar/atualizar paciente
+    function salvarPaciente() {
+      const nome = document.getElementById('editar-nome').value.trim();
+      const leito = document.getElementById('editar-leito').value.trim();
+      const ala = document.getElementById('editar-ala').value;
+      const status = document.getElementById('editar-status').value;
+      const diagnostico = document.getElementById('editar-diagnostico').value.trim();
+      const internacao = document.getElementById('editar-internacao').value;
+      const observacoes = document.getElementById('editar-observacoes').value.trim();
+
+      // Validação
+      if (!nome || !leito || !ala || !status || !diagnostico || !internacao) {
+        alert('Por favor, preencha todos os campos obrigatórios.');
+        return;
+      }
+
+      // Formatar data
+      const dataObj = new Date(internacao);
+      const dataFormatada = dataObj.toLocaleDateString('pt-BR');
+
+      if (pacienteEditando) {
+        // Atualizar paciente existente
+        pacienteEditando.nome = nome;
+        pacienteEditando.leito = leito;
+        pacienteEditando.ala = ala;
+        pacienteEditando.status = status;
+        pacienteEditando.diagnostico = diagnostico;
+        pacienteEditando.internacao = dataFormatada;
+        pacienteEditando.internacaoISO = internacao;
+        pacienteEditando.observacoes = observacoes;
+      } else {
+        // Criar novo paciente
+        const novoPaciente = {
+          id: Date.now(),
+          nome,
+          leito,
+          ala,
+          status,
+          diagnostico,
+          internacao: dataFormatada,
+          internacaoISO: internacao,
+          observacoes
+        };
+        pacientes.push(novoPaciente);
+      }
+
+      // Salvar no localStorage
+      localStorage.setItem('pacientes', JSON.stringify(pacientes));
+      
+      // Recarregar lista e fechar modal
+      carregarPacientes();
+      fecharModalEditar();
+      
+      // Mostrar feedback
+      alert(`Paciente ${pacienteEditando ? 'atualizado' : 'adicionado'} com sucesso!`);
+    }
+
+    // Função para dar alta a um paciente
+    function altaPaciente(id) {
+      if (confirm('Tem certeza que deseja dar alta a este paciente?')) {
+        pacientes = pacientes.filter(p => p.id != id);
+        localStorage.setItem('pacientes', JSON.stringify(pacientes));
+        carregarPacientes();
+        alert('Paciente recebeu alta com sucesso!');
+      }
+    }
+
+    // Função para fechar modal de visualização
+    function fecharModal() {
+      document.getElementById('modal-paciente').style.display = 'none';
+    }
+
+    // Função para fechar modal de edição
+    function fecharModalEditar() {
+      document.getElementById('modal-editar-paciente').style.display = 'none';
+      pacienteEditando = null;
+    }
+
+    // Função para editar paciente a partir do modal de visualização
+    function editarPacienteModal() {
+      fecharModal();
+      if (pacienteEditando) {
+        editarPaciente(pacienteEditando.id);
+      }
+    }
+
+    // Adicionar alguns pacientes de exemplo se não houver nenhum
+    if (pacientes.length === 0) {
+      const hoje = new Date().toISOString().split('T')[0];
+      const ontem = new Date();
+      ontem.setDate(ontem.getDate() - 1);
+      const ontemISO = ontem.toISOString().split('T')[0];
+      
+      pacientes = [
+        {
+          id: 1,
+          nome: "Maria Oliveira",
+          leito: "204A",
+          ala: "Clínica Médica",
+          status: "Estável",
+          diagnostico: "Pneumonia bacteriana",
+          internacao: new Date(ontemISO).toLocaleDateString('pt-BR'),
+          internacaoISO: ontemISO,
+          observacoes: "Melhorando com antibioticoterapia"
+        },
+        {
+          id: 2,
+          nome: "João Silva",
+          leito: "UTI-03",
+          ala: "UTI",
+          status: "Grave",
+          diagnostico: "COVID-19 grave",
+          internacao: new Date('2023-06-10').toLocaleDateString('pt-BR'),
+          internacaoISO: '2023-06-10',
+          observacoes: "Em ventilação mecânica, evolução lenta"
+        },
+        {
+          id: 3,
+          nome: "Ana Santos",
+          leito: "105B",
+          ala: "Pediatria",
+          status: "Moderado",
+          diagnostico: "Bronquiolite",
+          internacao: new Date(hoje).toLocaleDateString('pt-BR'),
+          internacaoISO: hoje,
+          observacoes: "Em observação para possível alta amanhã"
+        }
+      ];
+      
+      localStorage.setItem('pacientes', JSON.stringify(pacientes));
+      carregarPacientes();
+    }
+  </script>
+</body>
+</html>

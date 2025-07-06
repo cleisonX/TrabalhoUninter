@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Videochamada - VidaPlus</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: #f5f7fa;
+      color: #333;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 20px;
+      background-color: white;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      z-index: 10;
+    }
+
+    .logo-title {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo-title img {
+      width: 50px;
+      margin-right: 10px;
+    }
+
+    h1 {
+      font-size: 20px;
+      color: #2c3e50;
+      margin: 0;
+    }
+
+    /* Área fixa do vídeo */
+    .video-section {
+      height: 40vh;
+      display: flex;
+      flex-direction: column;
+      background-color: #000;
+      position: relative;
+    }
+
+    .video-container {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      position: relative;
+    }
+
+    .video-remote::before {
+      content: "Video do Paciente";
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: rgba(0,0,0,0.5);
+      padding: 5px 10px;
+      border-radius: 4px;
+      z-index: 2;
+    }
+
+    .video-local {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      width: 160px;
+      height: 120px;
+      background: #555;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      border: 2px solid white;
+      z-index: 5;
+    }
+
+    .controls {
+      display: flex;
+      gap: 15px;
+      padding: 15px;
+      justify-content: center;
+      background-color: #2c3e50;
+      flex-wrap: wrap;
+    }
+
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 500;
+      min-width: 120px;
+      justify-content: center;
+      transition: background-color 0.3s;
+    }
+
+    .btn-voltar {
+      background-color: #3498db;
+      color: white;
+    }
+
+    .btn-voltar:hover {
+      background-color: #2980b9;
+    }
+
+    .btn-audio {
+      background-color: #207cca;
+      color: white;
+    }
+
+    .btn-video {
+      background-color: #207cca;
+      color: white;
+    }
+
+    .btn-telacheia {
+      background-color: #28a745;
+      color: white;
+    }
+
+    .btn-encerrar {
+      background-color: #e74c3c;
+      color: white;
+    }
+
+    /* Área rolável */
+    .scrollable-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+    }
+
+    .paciente-info {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .paciente-info h2 {
+      margin-bottom: 15px;
+      color: #2c3e50;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 10px;
+    }
+
+    .info-row {
+      display: flex;
+      margin-bottom: 8px;
+    }
+
+    .info-label {
+      font-weight: 600;
+      width: 120px;
+      color: #555;
+    }
+
+    .info-value {
+      flex: 1;
+    }
+
+    .prescricao-box {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .prescricao-box h3 {
+      margin-bottom: 15px;
+      color: #2c3e50;
+    }
+
+    textarea {
+      width: 100%;
+      height: 120px;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      resize: vertical;
+      margin-bottom: 15px;
+    }
+
+    .btn-salvar {
+      background-color: #28a745;
+      color: white;
+    }
+
+    @media (max-width: 768px) {
+      .video-section {
+        height: 35vh;
+      }
+      
+      .video-local {
+        width: 120px;
+        height: 90px;
+        bottom: 70px;
+      }
+      
+      .controls {
+        padding: 10px;
+      }
+      
+      button {
+        flex: 1;
+        min-width: auto;
+        padding: 8px 10px;
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="logo-title">
+      <img src="vidaplus.png" alt="Logo VidaPlus">
+      <h1>Videochamada - VidaPlus</h1>
+    </div>
+    <button class="btn-voltar" onclick="window.location.href='agenda.html'">
+      <span>←</span> Voltar
+    </button>
+  </div>
+
+  <!-- Seção fixa do vídeo -->
+  <div class="video-section">
+    <div class="video-container">
+      <div class="video-remote">
+      </div>
+      <div class="video-local">
+        Sua câmera
+      </div>
+    </div>
+    
+    <div class="controls">
+      <button class="btn-audio" id="btnAudio" onclick="toggleAudio()">
+        <span>🎤</span> Áudio
+      </button>
+      <button class="btn-video" id="btnVideo" onclick="toggleVideo()">
+        <span>📷</span> Vídeo
+      </button>
+      <button class="btn-telacheia" onclick="toggleTelaCheia()">
+        <span>⛶</span> Tela Cheia
+      </button>
+      <button class="btn-encerrar" onclick="encerrarChamada()">
+        <span>📞</span> Encerrar Chamada
+      </button>
+    </div>
+  </div>
+
+  <!-- Área rolável com dados do paciente -->
+  <div class="scrollable-content">
+    <div class="paciente-info" id="pacienteData">
+      <h2>Dados do Paciente</h2>
+      <div class="info-row">
+        <div class="info-label">Nome:</div>
+        <div class="info-value" id="pacienteNome">-</div>
+      </div>
+      <div class="info-row">
+        <div class="info-label">Especialidade:</div>
+        <div class="info-value" id="pacienteEspecialidade">-</div>
+      </div>
+      <div class="info-row">
+        <div class="info-label">Modalidade:</div>
+        <div class="info-value" id="pacienteModalidade">-</div>
+      </div>
+    </div>
+
+    <div class="prescricao-box">
+      <h3>Prescrição Médica</h3>
+      <textarea id="prescricaoText" placeholder="Digite a prescrição médica aqui..."></textarea>
+      <button class="btn-salvar" onclick="salvarPrescricao()">
+        <span>💾</span> Salvar Prescrição
+      </button>
+    </div>
+  </div>
+
+  <script>
+    // Carrega os dados do paciente quando a página abre
+    window.onload = function() {
+      const paciente = JSON.parse(sessionStorage.getItem('consultaVideochamada')) || {
+        nome: 'Paciente não identificado',
+        especialidade: '-',
+        hora: '-',
+        modalidade: '-',
+      };
+
+      // Preenche os dados na tela
+      document.getElementById('pacienteNome').textContent = paciente.nome;
+      document.getElementById('pacienteEspecialidade').textContent = paciente.especialidade;
+      document.getElementById('pacienteModalidade').textContent = paciente.modalidade;
+      document.getElementById('consultaData').textContent = `${paciente.hora} - ${paciente.modalidade}`;
+    };
+
+    // Funções de controle
+    function toggleAudio() {
+      const btn = document.getElementById('btnAudio');
+      const ativo = btn.classList.toggle('desativado');
+      
+      if (ativo) {
+        btn.innerHTML = '<span>🔇</span> Áudio';
+        btn.style.backgroundColor = '#e74c3c';
+      } else {
+        btn.innerHTML = '<span>🎤</span> Áudio';
+        btn.style.backgroundColor = '#207cca';
+      }
+    }
+
+    function toggleVideo() {
+      const btn = document.getElementById('btnVideo');
+      const ativo = btn.classList.toggle('desativado');
+      
+      if (ativo) {
+        btn.innerHTML = '<span>📷</span> Vídeo';
+        btn.style.backgroundColor = '#e74c3c';
+        document.querySelector('.video-local').style.display = 'none';
+      } else {
+        btn.innerHTML = '<span>📷</span> Vídeo';
+        btn.style.backgroundColor = '#207cca';
+        document.querySelector('.video-local').style.display = 'flex';
+      }
+    }
+
+    function toggleTelaCheia() {
+      const elem = document.querySelector('.video-container');
+      
+      if (!document.fullscreenElement) {
+        if (elem.requestFullscreen) {
+          elem.requestFullscreen();
+        }
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
+    }
+
+    function salvarPrescricao() {
+      const prescricao = document.getElementById('prescricaoText').value;
+      if (prescricao.trim() === '') {
+        alert('Por favor, digite a prescrição médica antes de salvar.');
+        return;
+      }
+      
+      alert('Prescrição salva com sucesso!');
+      console.log('Prescrição salva:', prescricao);
+    }
+
+    function encerrarChamada() {
+      if (confirm('Tem certeza que deseja encerrar a chamada?')) {
+        window.location.href = 'agenda.html';
+      }
+    }
+  </script>
+</body>
+</html>

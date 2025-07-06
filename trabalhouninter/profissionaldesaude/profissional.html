@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Área do Profissional</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: #f5f7fa;
+      color: #333;
+    }
+
+    .container {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      width: 250px;
+      background: linear-gradient(135deg, #1e5799 0%, #207cca 100%);
+      color: white;
+      padding: 20px 0;
+      text-align: center;
+    }
+
+    .logo-img {
+      max-width: 100px;
+      margin-bottom: 10px;
+    }
+
+    .sidebar-header h2 {
+      font-size: 18px;
+      margin-bottom: 4px;
+    }
+
+    .sidebar-header p {
+      font-size: 13px;
+      line-height: 1.3;
+    }
+
+    .sidebar-menu {
+      margin-top: 30px;
+    }
+
+    .menu-item {
+      padding: 12px 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      transition: all 0.2s;
+    }
+
+    .menu-item:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .menu-item i {
+      margin-right: 10px;
+    }
+
+    .main-content {
+      flex: 1;
+      padding: 20px;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 20px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .logout-btn {
+      background-color: #e74c3c;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .card {
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      padding: 20px;
+      margin-bottom: 20px;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .card h3 {
+      margin-bottom: 15px;
+      color: #2c3e50;
+    }
+
+    .notification-badge {
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      background-color: #e74c3c;
+      color: white;
+      border-radius: 50%;
+      width: 25px;
+      height: 25px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: bold;
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+
+<body>
+  <div class="container">
+    <div class="sidebar">
+      <div class="sidebar-header">
+        <img src="vidaplus.png" alt="Logo VidaPlus" class="logo-img">
+        <h2>Vida Plus</h2>
+        <p>Gestão Hospitalar<br>e Serviços de Saúde</p>
+      </div>
+      <div class="sidebar-menu">
+        <div class="menu-item" onclick="window.location.href='agenda.html'">
+          <i class="fas fa-calendar-alt"></i> Minha Agenda
+        </div>
+        <div class="menu-item" onclick="window.location.href='receita.html'">
+          <i class="fas fa-prescription-bottle-alt"></i> Receitas
+        </div>
+        <div class="menu-item" onclick="window.location.href='prontuarios.html'">
+          <i class="fas fa-notes-medical"></i> Prontuários
+        </div>
+        <div class="menu-item" onclick="window.location.href='meuspacientes.html'">
+          <i class="fas fa-procedures"></i> Meus Pacientes
+        </div>
+      </div>
+    </div>
+
+    <div class="main-content">
+      <div class="header">
+        <h2>Bem-vindo, Profissional</h2>
+        <button class="logout-btn" onclick="window.location.href='../login.html'">
+          <i class="fas fa-sign-out-alt"></i> Sair
+        </button>
+      </div>
+
+      <div class="card" id="agendaCard" onclick="window.location.href='agenda.html'">
+        <h3>Minha Agenda</h3>
+        <p id="consultasText">Carregando suas consultas...</p>
+      </div>
+
+      <div class="card" id="agendaCard" onclick="window.location.href='receita.html'">
+        <h3>Emitir Receitas</h3>
+        <p>Crie e gerencie receitas digitais para seus pacientes.</p>
+      </div>
+
+      <div class="card" id="agendaCard" onclick="window.location.href='prontuarios.html'">
+        <h3>Prontuários</h3>
+        <p>Atualize e consulte os prontuários médicos.</p>
+      </div>
+
+      <div class="card" id="agendaCard" onclick="window.location.href='meuspacientes.html'">
+        <h3>Seus Pacientes</h3>
+        <p>Aqui estão os seus pacientes Internados.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // Simulação das consultas agendadas (substitua pelo seu método real de obtenção)
+      const consultasHoje = obterConsultasAgendadas();
+
+      const agendaCard = document.getElementById('agendaCard');
+      const consultasText = document.getElementById('consultasText');
+
+      if (consultasHoje.length > 0) {
+        consultasText.textContent = `Você tem ${consultasHoje.length} consulta(s) agendada(s) para hoje.`;
+
+        // Adiciona badge de notificação
+        const badge = document.createElement('div');
+        badge.className = 'notification-badge';
+        badge.textContent = consultasHoje.length;
+        agendaCard.appendChild(badge);
+      } else {
+        consultasText.textContent = 'Nenhuma consulta agendada para hoje.';
+      }
+    });
+
+    // Função de exemplo - substitua pela sua lógica real
+    function obterConsultasAgendadas() {
+      // Verifica se há consultas no localStorage (mesmo formato da agenda.html)
+      const consultas = JSON.parse(localStorage.getItem('consultas')) || [];
+
+      // Filtra apenas as consultas de hoje
+      const hoje = new Date().toISOString().split('T')[0]; // Formato YYYY-MM-DD
+      return consultas.filter(consulta =>
+        consulta.data === hoje && consulta.status === 'agendada'
+      );
+
+      // Se não estiver usando localStorage, você pode:
+      // 1. Contar os cards da agenda.html (se estiver no mesmo domínio)
+      // 2. Fazer uma requisição a uma API
+      // 3. Usar outro método de armazenamento
+    }
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Relatório Financeiro - VidaPlus</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      background-color: #f5f7fa;
+      margin: 0;
+      padding: 40px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 25px;
+    }
+
+    .header img {
+      width: 50px;
+      margin-right: 15px;
+    }
+
+    .header h2 {
+      margin: 0;
+      color: #207cca;
+    }
+
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 15px;
+    }
+
+    select {
+      padding: 10px;
+      width: 100%;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      margin-top: 5px;
+    }
+
+    .relatorio {
+      margin-top: 30px;
+    }
+
+    ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    li {
+      margin-bottom: 8px;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 10px 18px;
+      border: none;
+      background-color: #207cca;
+      color: white;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    a {
+      display: inline-block;
+      margin-top: 30px;
+      color: #207cca;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <img src="vidaplus.png" alt="Logo">
+      <h2>Relatório Financeiro</h2>
+    </div>
+
+    <!-- Filtros para procura de resultado-->
+    <label for="periodo">Período:</label>
+    <select id="periodo" onchange="mostrarFinanceiro()">
+      <option value="30">Últimos 30 dias</option>
+      <option value="90">Últimos 90 dias</option>
+      <option value="ano">Ano Atual</option>
+    </select>
+
+    <!-- Resultado -->
+    <div class="relatorio" id="conteudoFinanceiro"></div>
+
+    <a href="relatorios.html">← Voltar</a>
+  </div>
+
+  <script>
+    function mostrarFinanceiro() {
+      const periodo = document.getElementById('periodo').value;
+      const relatorio = document.getElementById('conteudoFinanceiro');
+
+      let resultado = "";
+
+      if (periodo === "30") {
+        resultado = `
+          <ul>
+            <li>Receita: R$ 540.000</li>
+            <li>Despesas: R$ 320.000</li>
+            <li>Lucro líquido: R$ 220.000</li>
+          </ul>
+        `;
+      } else if (periodo === "90") {
+        resultado = `
+          <ul>
+            <li>Receita: R$ 1.570.000</li>
+            <li>Despesas: R$ 920.000</li>
+            <li>Lucro líquido: R$ 650.000</li>
+          </ul>
+        `;
+      } else {
+        resultado = `
+          <ul>
+            <li>Receita anual acumulada: R$ 4.820.000</li>
+            <li>Despesas totais: R$ 2.980.000</li>
+            <li>Lucro até agora: R$ 1.840.000</li>
+          </ul>
+        `;
+      }
+
+      relatorio.innerHTML = resultado;
+    }
+
+    // Exibe o relatório ao abrir
+    mostrarFinanceiro();
+  </script>
+</body>
+</html>

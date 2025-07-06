@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Área do Paciente</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+        /* Estilos gerais da página */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        /*fundo geral da página*/
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Estilos da barra lateral */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            overflow-y: auto;
+            width: 250px;
+            background: linear-gradient(135deg, #1e5799 0%, #207cca 100%);
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+        /*Logo Centralizado*/
+        .logo-img {
+            max-width: 100px;
+            margin-bottom: 10px;
+        }
+        /*Título*/
+        .sidebar-header h2 {
+            font-size: 18px;
+            margin-bottom: 4px;
+        }
+        /*subtítulo*/
+        .sidebar-header p {
+            font-size: 13px;
+            line-height: 1.3;
+        }
+
+        .sidebar-menu {
+            margin-top: 30px;
+        }
+        /*itens clicáveis do menu*/
+        .menu-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            transition: all 0.2s;
+        }
+
+        .menu-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .menu-item i {
+            margin-right: 10px;
+        }
+
+        /* Estilos do conteúdo principal */
+        .main-content {
+            margin-left: 250px;
+            flex: 1;
+            padding: 20px;
+        }
+
+        /* Estilos do cabeçalho da página*/
+        .header {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .header-top {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px; /* Espaço entre o topo e a mensagem de notificações */
+        }
+
+        /* Estilo para a mensagem de notificações*/
+        .submensagem-header {
+            font-size: 14px;
+            color: #444;
+            font-weight: normal;
+            margin-top: 4px;
+        }
+
+        .logout-btn {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        /* Estilos dos cards */
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+
+        .card h3 {
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+    </style>
+</head>
+
+<body>
+    <!--Menu Sidebar-->
+    <div class="container">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <img src="vidaplus.png" alt="Logo VidaPlus" class="logo-img">
+                <h2>Vida Plus</h2>
+                <p>Gestão Hospitalar<br>e Serviços de Saúde</p>
+            </div>
+            <div class="sidebar-menu">
+                <div class="menu-item" onclick="window.location.href='meusdados.html'">
+                    <i class="fas fa-user-edit"></i> Meus Dados
+                </div>
+                <div class="menu-item" onclick="window.location.href='minhasconsultas.html'">
+                    <i class="fas fa-calendar-check"></i> Minhas Consultas
+                </div>
+                <div class="menu-item" onclick="window.location.href='teleconsultas.html'">
+                    <i class="fas fa-video"></i> Telemedicina
+                </div>
+                <div class="menu-item" onclick="window.location.href='historicomedico.html'">
+                    <i class="fas fa-file-medical"></i> Histórico Médico
+                </div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <!-- cabeçalho e botão sair -->
+            <div class="header">
+                <div class="header-top">
+                    <h2>Bem-vindo, Paciente.</h2>
+                    <button class="logout-btn" onclick="window.location.href='../login.html'">
+                        <i class="fas fa-sign-out-alt"></i> Sair
+                    </button>
+                </div>
+                <p class="submensagem-header">Suas notificações</p>
+            </div>
+
+            <div class="notificacoes">
+                <!-- notificações -->
+            </div>
+
+            <div class="card" onclick="window.location.href='minhasconsultas.html'">
+                <h3>Minhas Consultas Agendadas</h3>
+                <p id="quantidadeConsultas"></p>
+            </div>
+
+            <div class="card" onclick="window.location.href='meusdados.html'">
+                <h3>Meus Dados Pessoais</h3>
+                <p>Atualize suas informações pessoais e de contato.</p>
+            </div>
+
+            <div class="card" onclick="window.location.href='teleconsultas.html'">
+                <h3>Telemedicina</h3>
+                <p>Acesse suas consultas remotas agendadas.</p>
+            </div>
+
+            <div class="card" onclick="window.location.href='historicomedico.html'">
+                <h3>Histórico Médico</h3>
+                <p>Acesse aqui o seu histórico médico.</p>
+            </div>
+        </div>
+    </div>
+    <!--link para abrir o termo LGPD-->
+    <footer style="text-align: center; margin-top: 40px; font-size: 13px; color: #666;">
+        <a href="#" onclick="abrirLGPD()">Termo de Privacidade (LGPD)</a>
+    </footer>
+
+    <div id="modalLGPD"
+        style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:999;">
+        <div style="background:#fff; width:90%; max-width:600px; margin:50px auto; padding:30px; border-radius:8px;">
+            <h2 style="margin-top:0;">Consentimento de Privacidade</h2>
+            <p>
+                A VidaPlus respeita seus dados pessoais conforme a LGPD. Seus dados serão utilizados exclusivamente para
+                atendimento médico e gestão clínica, com total segurança.
+            </p>
+            <label>
+                <input type="checkbox" id="checkboxLGPD"> Concordo com os termos da LGPD.
+            </label><br><br>
+            <button onclick="aceitarLGPD()"
+                style="background:#207cca; color:white; border:none; padding:10px 20px; border-radius:4px;">Concordar</button>
+            <button onclick="fecharLGPD()" style="margin-left:10px;">Cancelar</button>
+        </div>
+    </div>
+
+    <script>
+        //abre o modal Lgpd ao clicar no link
+        function abrirLGPD() {
+            document.getElementById('modalLGPD').style.display = 'block';
+        }
+        //fecha o modal sem salvar
+        function fecharLGPD() {
+            document.getElementById('modalLGPD').style.display = 'none';
+        }
+        //valida se o usuário marcou o checkbox antes de prosseguir
+        function aceitarLGPD() {
+            const aceita = document.getElementById('checkboxLGPD').checked;
+            if (aceita) {
+                alert("Consentimento registrado com sucesso!");
+                fecharLGPD();
+            } else {
+                alert("Você precisa aceitar os termos para continuar.");
+            }
+        }
+
+        window.onload = () => {
+            //Recupera agendamentos armazenados
+            const consultas = JSON.parse(localStorage.getItem("consultasAgendadas") || "[]");
+            const agora = new Date();
+            const futuras = consultas.filter(c => {
+                const dataHora = new Date(`${c.data}T${c.hora}`);
+                return dataHora >= agora;
+            });
+            //Atualiza o texto com a quantidades de consultas futuras agendadas
+            const alvo = document.getElementById("quantidadeConsultas");
+            if (futuras.length > 0 && alvo) {
+                alvo.textContent = `Você tem ${futuras.length} consulta${futuras.length > 1 ? "s" : ""} agendada${futuras.length > 1 ? "s" : ""}.`;
+            } else if (alvo) {
+                alvo.style.display = "none";
+            }
+        };
+    </script>
+</body>
+</html>

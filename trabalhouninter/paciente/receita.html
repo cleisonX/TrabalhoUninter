@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Receita Médica - VidaPlus</title>
+  <style>
+    /* Estilos base */
+    body {
+      font-family: 'Georgia', serif;
+      padding: 20px;
+      max-width: 700px;
+      margin: auto;
+      background: #fff;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    /* Cabeçalho */
+    h2 { 
+      text-align: center; 
+      border-bottom: 2px solid #000; 
+      margin-bottom: 30px; 
+      font-size: 1.5rem; /* Tamanho relativo */
+    }
+
+    /* Campos da receita */
+    .campo { 
+      margin-bottom: 20px; 
+    }
+    
+    .campo strong { 
+      display: inline-block; 
+      width: 120px; /* Largura reduzida para mobile */
+    }
+
+    /* Lista de prescrição */
+    ul { 
+      margin-top: 10px; 
+      padding-left: 20px; 
+    }
+
+    /* Assinatura */
+    .assinatura { 
+      margin-top: 50px; 
+      text-align: right; 
+    }
+
+    /* Botão de impressão */
+    .btn-imprimir {
+      display: block;
+      margin: 30px auto 0;
+      padding: 10px 20px;
+      border: none;
+      background-color: #207cca;
+      color: white;
+      font-weight: bold;
+      border-radius: 5px;
+      cursor: pointer;
+      width: 200px;
+      text-align: center;
+    }
+
+    .btn-imprimir:hover { 
+      background-color: #1a5da5; 
+    }
+
+    /* Esconde o botão ao imprimir */
+    @media print { 
+      button { display: none; } 
+    }
+
+    /* adicionado responsividade */
+    @media (max-width: 768px) {
+      body {
+        padding: 15px;
+      }
+      
+      h2 {
+        font-size: 1.3rem;
+        margin-bottom: 20px;
+      }
+      
+      .campo strong {
+        width: 100px;
+        font-size: 0.9rem;
+      }
+      
+      .assinatura {
+        margin-top: 30px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 10px;
+      }
+      
+      .campo strong {
+        display: block;
+        width: auto;
+        margin-bottom: 5px;
+      }
+      
+      .btn-imprimir {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h2>Receita Médica</h2>
+
+  <!-- Dados do paciente -->
+  <div class="campo"><strong>Paciente:</strong> <span id="paciente"></span></div>
+  <div class="campo"><strong>Médico:</strong> <span id="medico"></span></div>
+  <div class="campo"><strong>Especialidade:</strong> <span id="especialidade"></span></div>
+  <div class="campo"><strong>Data:</strong> <span id="data"></span></div>
+  <div class="campo"><strong>Diagnóstico:</strong> <span id="diagnostico"></span></div>
+
+  <hr style="margin: 30px 0;">
+
+  <!-- Prescrição médica -->
+  <div class="campo">
+    <strong>Prescrição:</strong>
+    <ul id="prescricao"></ul>
+  </div>
+
+  <!-- Assinatura do médico -->
+  <div class="assinatura">
+    ___________________________<br>
+    <span id="assinaturaMedico"></span><br>
+    CRM: 123456-RS
+  </div>
+
+  <!-- Botão de impressão -->
+  <button class="btn-imprimir" onclick="window.print()">🖨️ Imprimir Receita</button>
+
+  <script>
+    // Banco de dados de receitas (simulado)
+    const receitas = [
+      {
+        id: 1,
+        paciente: "Exemplo da Silva",
+        medico: "Dr. Lucas Andrade",
+        especialidade: "Ortopedia",
+        data: "12/06/2025",
+        diagnostico: "Tendinite no ombro direito",
+        prescricao: [
+          "Ibuprofeno 600mg – 1 comprimido a cada 8h por 5 dias",
+          "Fisioterapia leve – 3x por semana por 4 semanas",
+          "Gelo e repouso parcial"
+        ]
+      },
+      {
+        id: 2,
+        paciente: "Exemplo da Silva",
+        medico: "Dra. Paula Nogueira",
+        especialidade: "Clínica Geral",
+        data: "03/05/2025",
+        diagnostico: "Infecção urinária leve",
+        prescricao: [
+          "Nitrofurantoína 100mg – a cada 6h por 7 dias",
+          "Ingestão de 2L de água por dia",
+          "Repouso relativo"
+        ]
+      }
+    ];
+
+    // Obtém o ID da receita da URL
+    const params = new URLSearchParams(window.location.search);
+    const id = parseInt(params.get("id"));
+    
+    // Busca a receita correspondente
+    const receita = receitas.find(r => r.id === id);
+
+    // Se não encontrar a receita, mostra mensagem de erro
+    if (!receita) {
+      document.body.innerHTML = "<p>Receita não encontrada.</p>";
+    } else {
+      // Preenche os dados da receita na página
+      document.getElementById("paciente").textContent = receita.paciente;
+      document.getElementById("medico").textContent = receita.medico;
+      document.getElementById("especialidade").textContent = receita.especialidade;
+      document.getElementById("data").textContent = receita.data;
+      document.getElementById("diagnostico").textContent = receita.diagnostico;
+      document.getElementById("assinaturaMedico").textContent = receita.medico;
+
+      // Preenche a lista de prescrição
+      const ul = document.getElementById("prescricao");
+      receita.prescricao.forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = item;
+        ul.appendChild(li);
+      });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prontuários - VidaPlus</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: #f5f7fa;
+      color: #333;
+    }
+
+    .container {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      width: 250px;
+      background: linear-gradient(135deg, #1e5799 0%, #207cca 100%);
+      color: white;
+      padding: 20px 0;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .logo-img {
+      max-width: 100px;
+      margin-bottom: 10px;
+    }
+
+    .sidebar h2 {
+      font-size: 18px;
+      margin-bottom: 4px;
+    }
+
+    .sidebar p {
+      font-size: 13px;
+      line-height: 1.3;
+    }
+
+    .sidebar-menu {
+      margin-top: 30px;
+    }
+
+    .menu-item {
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .menu-item:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .menu-item i {
+      margin-right: 10px;
+    }
+
+    .menu-item.active {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .main-content {
+      flex: 1;
+      padding: 30px 40px;
+      overflow: auto;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+    }
+
+    .logout-btn {
+      background-color: #e74c3c;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .form-box {
+      background-color: white;
+      padding: 25px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      margin-bottom: 30px;
+    }
+
+    .form-box h3 {
+      margin-bottom: 15px;
+      color: #2c3e50;
+    }
+
+    .receitas-list {
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      overflow: hidden;
+    }
+
+    .receita-item {
+      padding: 15px 20px;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .receita-item:last-child {
+      border-bottom: none;
+    }
+
+    .receita-info h4 {
+      margin-bottom: 5px;
+      color: #2c3e50;
+    }
+
+    .receita-info p {
+      color: #7f8c8d;
+      font-size: 14px;
+    }
+
+    .receita-actions a {
+      margin-left: 10px;
+      color: #207cca;
+      text-decoration: none;
+    }
+
+    .receita-actions a:hover {
+      text-decoration: underline;
+    }
+
+    .search-bar {
+      display: flex;
+      margin-bottom: 20px;
+    }
+
+    .search-bar input {
+      flex: 1;
+      padding: 10px 15px;
+      border: 1px solid #ddd;
+      border-radius: 6px 0 0 6px;
+    }
+
+    .search-bar button {
+      background-color: #207cca;
+      color: white;
+      border: none;
+      padding: 0 15px;
+      border-radius: 0 6px 6px 0;
+      cursor: pointer;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background-color: white;
+      width: 80%;
+      max-width: 800px;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .modal-header {
+      padding: 15px 20px;
+      background-color: #207cca;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-body {
+      padding: 20px;
+      max-height: 70vh;
+      overflow-y: auto;
+    }
+
+    .close-modal {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    .btn {
+      border: none;
+      padding: 10px 18px;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-right: 10px;
+    }
+
+    .btn-primary {
+      background-color: #207cca;
+      color: white;
+    }
+
+    .btn-danger {
+      background-color: #e74c3c;
+      color: white;
+    }
+
+    .edit-form {
+      display: none;
+      margin-top: 20px;
+      padding: 15px;
+      background-color: #f8f9fa;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <!-- Menu lateral -->
+    <div class="sidebar">
+      <img src="vidaplus.png" alt="Logo VidaPlus" class="logo-img">
+      <h2>Vida Plus</h2>
+      <p>Gestão Hospitalar<br>e Serviços de Saúde</p>
+      <div class="sidebar-menu">
+        <div class="menu-item" onclick="window.location.href='agenda.html'"><i class="fas fa-calendar-alt"></i> Minha
+          Agenda</div>
+        <div class="menu-item" onclick="window.location.href='receita.html'"><i
+            class="fas fa-prescription-bottle-alt"></i> Receitas</div>
+        <div class="menu-item active"><i class="fas fa-notes-medical"></i> Prontuários</div>
+        <div class="menu-item"><i class="fas fa-procedures"></i> Meus Pacientes</div>
+      </div>
+    </div>
+
+    <!-- Conteúdo principal -->
+    <div class="main-content">
+      <div class="header">
+        <h2>Prontuários e Receitas</h2>
+        <button class="logout-btn" onclick="window.location.href='profissional.html'">
+          <i class="fas fa-chevron-left"></i> Voltar
+        </button>
+      </div>
+
+      <!-- Barra de pesquisa -->
+      <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Pesquisar receitas por paciente ou medicamento..."
+          onkeyup="filtrarReceitas()">
+        <button><i class="fas fa-search"></i></button>
+      </div>
+
+      <!-- Lista de receitas existentes -->
+      <div class="form-box">
+        <h3><i class="fas fa-list"></i> Receitas Salvas</h3>
+
+        <div class="receitas-list" id="lista-receitas">
+          <!-- As receitas serão carregadas aqui via JavaScript -->
+          <p style="text-align: center; padding: 20px; color: #7f8c8d;">Carregando receitas...</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para visualização de receita -->
+  <div class="modal" id="modal-receita">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Receita Médica</h3>
+        <button class="close-modal" onclick="fecharModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div style="text-align: center; margin-bottom: 20px;">
+          <img src="vidaplus.png" alt="Logo VidaPlus" style="max-width: 120px;">
+          <h2 style="margin: 10px 0;">Vida Plus Saúde</h2>
+          <p style="color: #7f8c8d;">Rua das Flores, 123 - Centro - São Paulo/SP</p>
+          <p style="color: #7f8c8d;">CRM: 123456 | CPF: 123.456.789-00</p>
+        </div>
+
+        <div style="margin-bottom: 30px;">
+          <p><strong>Paciente:</strong> <span id="modal-paciente">Cleison Ferreira</span></p>
+          <p><strong>Data:</strong> <span id="modal-data">15/06/2023</span></p>
+        </div>
+
+        <h4 style="border-bottom: 1px solid #ddd; padding-bottom: 5px; margin-bottom: 15px;">Medicamentos Prescritos
+        </h4>
+        <div id="modal-medicamentos">
+          <div style="margin-bottom: 15px;">
+            <p><strong>1. Dipirona Monoidratada</strong></p>
+            <p>Dosagem: 500mg</p>
+            <p>Frequência: 1 comprimido de 6/6 horas por 3 dias</p>
+          </div>
+        </div>
+
+        <h4 style="border-bottom: 1px solid #ddd; padding-bottom: 5px; margin-bottom: 15px;">Observações</h4>
+        <p id="modal-observacoes">Nenhuma observação adicional.</p>
+
+        <div style="margin-top: 40px; text-align: center;">
+          <p style="border-top: 1px solid #ddd; padding-top: 20px;">
+            <strong>Dr. Carlos Eduardo</strong><br>
+            Clínico Geral | CRM/SP 123456
+          </p>
+        </div>
+      </div>
+      <div style="padding: 15px; text-align: right; border-top: 1px solid #eee;">
+        <button class="btn btn-primary" onclick="imprimirReceita()">
+          <i class="fas fa-print"></i> Imprimir
+        </button>
+        <button class="btn btn-danger" onclick="fecharModal()">
+          <i class="fas fa-times"></i> Fechar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Carregar receitas ao abrir a página
+    document.addEventListener('DOMContentLoaded', carregarReceitas);
+
+    // Função para carregar as receitas salvas
+    function carregarReceitas() {
+      const receitas = JSON.parse(localStorage.getItem('receitas')) || [];
+      const lista = document.getElementById('lista-receitas');
+
+      if (receitas.length === 0) {
+        lista.innerHTML = '<p style="text-align: center; padding: 20px; color: #7f8c8d;">Nenhuma receita encontrada.</p>';
+        return;
+      }
+
+      let html = '';
+
+      receitas.forEach(receita => {
+        html += `
+          <div class="receita-item" data-id="${receita.id}">
+            <div class="receita-info">
+              <h4>${receita.pacienteNome}</h4>
+              <p>${receita.medicamentos.length} medicamento(s) • ${receita.data}</p>
+              <div class="edit-form" id="edit-form-${receita.id}">
+                <div class="form-group">
+                  <label>Observações</label>
+                  <textarea id="observacoes-${receita.id}" rows="3">${receita.observacoes || ''}</textarea>
+                </div>
+                <button class="btn btn-primary" onclick="salvarEdicao(${receita.id})">
+                  <i class="fas fa-save"></i> Salvar
+                </button>
+                <button class="btn btn-secondary" onclick="cancelarEdicao(${receita.id})">
+                  <i class="fas fa-times"></i> Cancelar
+                </button>
+              </div>
+            </div>
+            <div class="receita-actions">
+              <a href="#" onclick="visualizarReceita(${receita.id})"><i class="fas fa-eye"></i> Visualizar</a>
+              <a href="#" onclick="editarReceita(${receita.id})"><i class="fas fa-edit"></i> Editar</a>
+              <a href="#" onclick="imprimirReceita(${receita.id})"><i class="fas fa-print"></i> Imprimir</a>
+              <a href="#" onclick="excluirReceita(${receita.id})" style="color: #e74c3c;"><i class="fas fa-trash"></i> Excluir</a>
+            </div>
+          </div>
+        `;
+      });
+
+      lista.innerHTML = html;
+    }
+
+    // Função para filtrar receitas na pesquisa
+    function filtrarReceitas() {
+      const termo = document.getElementById('searchInput').value.toLowerCase();
+      const receitas = document.querySelectorAll('.receita-item');
+
+      receitas.forEach(receita => {
+        const texto = receita.textContent.toLowerCase();
+        if (texto.includes(termo)) {
+          receita.style.display = 'flex';
+        } else {
+          receita.style.display = 'none';
+        }
+      });
+    }
+
+    // Função para visualizar receita no modal
+    function visualizarReceita(id) {
+      const receitas = JSON.parse(localStorage.getItem('receitas')) || [];
+      const receita = receitas.find(r => r.id == id);
+
+      if (!receita) {
+        alert('Receita não encontrada!');
+        return;
+      }
+
+      document.getElementById('modal-paciente').textContent = receita.pacienteNome;
+      document.getElementById('modal-data').textContent = receita.data;
+
+      // Preencher medicamentos
+      let medicamentosHtml = '';
+      receita.medicamentos.forEach((med, index) => {
+        medicamentosHtml += `
+          <div style="margin-bottom: 15px;">
+            <p><strong>${index + 1}. ${med.nome}</strong></p>
+            <p>Dosagem: ${med.dosagem}</p>
+            <p>Frequência: ${med.frequencia}</p>
+          </div>
+        `;
+      });
+
+      document.getElementById('modal-medicamentos').innerHTML = medicamentosHtml ||
+        '<p>Nenhum medicamento prescrito</p>';
+
+      document.getElementById('modal-observacoes').textContent =
+        receita.observacoes || 'Nenhuma observação adicional.';
+
+      // Mostrar modal
+      document.getElementById('modal-receita').style.display = 'flex';
+    }
+
+    // Função para editar receita
+    function editarReceita(id) {
+      document.getElementById(`edit-form-${id}`).style.display = 'block';
+    }
+
+    // Função para salvar edição
+    function salvarEdicao(id) {
+      const receitas = JSON.parse(localStorage.getItem('receitas')) || [];
+      const receitaIndex = receitas.findIndex(r => r.id == id);
+
+      if (receitaIndex !== -1) {
+        receitas[receitaIndex].observacoes = document.getElementById(`observacoes-${id}`).value;
+        localStorage.setItem('receitas', JSON.stringify(receitas));
+        alert('Receita atualizada com sucesso!');
+        cancelarEdicao(id);
+        carregarReceitas();
+      }
+    }
+
+    // Função para cancelar edição
+    function cancelarEdicao(id) {
+      document.getElementById(`edit-form-${id}`).style.display = 'none';
+    }
+
+    // Função para excluir receita
+    function excluirReceita(id) {
+      if (confirm('Tem certeza que deseja excluir esta receita?')) {
+        let receitas = JSON.parse(localStorage.getItem('receitas')) || [];
+        receitas = receitas.filter(r => r.id != id);
+        localStorage.setItem('receitas', JSON.stringify(receitas));
+        carregarReceitas();
+      }
+    }
+
+    // Função para imprimir receita
+    function imprimirReceita(id) {
+      // Primeiro visualiza a receita
+      visualizarReceita(id);
+
+      // Depois de um pequeno delay para garantir que o modal está aberto
+      setTimeout(() => {
+        const modalContent = document.querySelector('.modal-content').cloneNode(true);
+        const printWindow = window.open('', '_blank');
+
+        printWindow.document.write(`
+          <html>
+            <head>
+              <title>Receita Médica - ${document.getElementById('modal-paciente').textContent}</title>
+              <style>
+                body { font-family: Arial, sans-serif; line-height: 1.6; padding: 20px; }
+                h2, h3, h4 { color: #2c3e50; }
+                .header { text-align: center; margin-bottom: 20px; }
+                .section { margin-bottom: 20px; }
+                .section-title { border-bottom: 1px solid #ddd; padding-bottom: 5px; }
+                .footer { margin-top: 40px; text-align: center; border-top: 1px solid #ddd; padding-top: 20px; }
+              </style>
+            </head>
+            <body>
+              ${modalContent.innerHTML}
+            </body>
+          </html>
+        `);
+
+        printWindow.document.close();
+        printWindow.print();
+      }, 500);
+    }
+
+    // Função para fechar o modal
+    function fecharModal() {
+      document.getElementById('modal-receita').style.display = 'none';
+    }
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Área do Administrador - VidaPlus</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+  <style>
+    /* Reset básico e tipografia da página */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: #f5f7fa;
+      padding: 20px;
+      color: #333;
+    }
+
+    /* Cabeçalho principal */
+    header {
+      background-color: #207cca;
+      color: white;
+      padding: 18px;
+      text-align: center;
+      border-radius: 8px;
+      margin-bottom: 25px;
+    }
+
+    /* Botão Voltar */
+    .btn-voltar {
+      background-color: #e74c3c;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+
+    /* Layout das duas colunas */
+    .container {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    /* Cartões das seções */
+    .card {
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      padding: 20px;
+      flex: 1;
+      min-width: 300px;
+    }
+
+    .card h2 {
+      color: #207cca;
+      margin-bottom: 15px;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 10px;
+    }
+
+    /* Tabela */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 10px;
+      border-bottom: 1px solid #eee;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f0f2f5;
+    }
+
+    /* Botões de ação */
+    .btn {
+      padding: 8px 12px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+      margin-right: 6px;
+    }
+
+    .btn-edit {
+      background-color: #ffc107;
+      color: #212529;
+    }
+
+    .btn-delete {
+      background-color: #dc3545;
+      color: white;
+    }
+
+    .btn-add {
+      background-color: #28a745;
+      color: white;
+      margin-bottom: 15px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Cabeçalho -->
+  <header>
+    <h1>Administração de Pacientes e Profissionais</h1>
+  </header>
+
+  <!-- Botão Voltar -->
+  <button class="btn-voltar" onclick="window.location.href='admin.html'">
+    <i class="fas fa-chevron-left"></i> Voltar
+  </button>
+
+  <!-- Conteúdo principal -->
+  <div class="container">
+
+    <!-- Card de Profissionais -->
+    <div class="card">
+      <h2>Profissionais de Saúde</h2>
+      <button class="btn btn-add">Adicionar Profissional</button>
+      <table>
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Especialidade</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Dr. Carlos Silva</td>
+            <td>Clínico Geral</td>
+            <td>
+              <button class="btn btn-edit">Editar</button>
+              <button class="btn btn-delete">Remover</button>
+            </td>
+          </tr>
+          <tr>
+            <td>Dra. Ana Oliveira</td>
+            <td>Pediatria</td>
+            <td>
+              <button class="btn btn-edit">Editar</button>
+              <button class="btn btn-delete">Remover</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Card de Pacientes -->
+    <div class="card">
+      <h2>Pacientes</h2>
+      <button class="btn btn-add">Adicionar Paciente</button>
+      <table>
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>CPF</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>João Pereira</td>
+            <td>123.456.789-00</td>
+            <td>
+              <button class="btn btn-edit">Editar</button>
+              <button class="btn btn-delete">Remover</button>
+            </td>
+          </tr>
+          <tr>
+            <td>Maria Santos</td>
+            <td>987.654.321-00</td>
+            <td>
+              <button class="btn btn-edit">Editar</button>
+              <button class="btn btn-delete">Remover</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <!-- Funções simuladas -->
+  <script>
+    document.querySelectorAll('.btn-add').forEach(btn => {
+      btn.addEventListener('click', () => {
+        alert('Função de adicionar será implementada!');
+      });
+    });
+
+    document.querySelectorAll('.btn-edit').forEach(btn => {
+      btn.addEventListener('click', () => {
+        alert('Função de editar será implementada!');
+      });
+    });
+
+    document.querySelectorAll('.btn-delete').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (confirm('Deseja realmente remover este item?')) {
+          alert('Item removido com sucesso!');
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>

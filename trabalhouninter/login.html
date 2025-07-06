@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login VidaPlus</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
+  <style>
+    /* Reset e fonte */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    /* Estilo geral corpo da página de login  */
+    body {
+      background-color: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .login-container {
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      max-width: 350px;
+      width: 100%;
+    }
+    /*caixa principal do formulário de login*/
+    .login-container img {
+      width: 200px;
+      height: auto;
+      margin-bottom: 10px;
+    }
+
+    .login-container p {
+      font-size: 20px;
+      color: #555;
+      margin-bottom: 30px;
+    }
+
+    select,
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+
+    .login-btn {
+      width: 100%;
+      padding: 12px;
+      background-color: #007BFF;
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .login-btn:hover {
+      background-color: #0056b3;
+    }
+
+    .register-btn {
+      display: block;
+      width: 100%;
+      margin-top: 20px;
+      background: none;
+      border: none;
+      color: #007BFF;
+      font-size: 14px;
+      text-decoration: underline;
+      cursor: pointer;
+      padding: 10px;
+    }
+
+    .register-btn:hover {
+      color: #0056b3;
+      text-decoration: none;
+    }
+
+    @media (max-width: 400px) {
+      .login-container {
+        padding: 20px;
+      }
+
+      .login-container img {
+        width: 150px;
+      }
+
+      .login-container p {
+        font-size: 18px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="login-container">
+    <!-- Logo -->
+    <img src="vidaplus.png" alt="Logo VidaPlus" />
+
+    <!-- Descrição -->
+    <p>Gestão Hospitalar e Serviços de Saúde</p>
+
+    <!-- Formulário de login -->
+    <form id="loginForm">
+      <!-- Seleciona o tipo de usuário -->
+      <select id="tipoUsuario" required>
+        <option value="">Selecione o perfil</option>
+        <option value="paciente">Paciente</option>
+        <option value="profissional">Profissional de Saúde</option>
+        <option value="admin">Administrador</option>
+      </select>
+
+      <!-- Seleção de unidade hospitalar -->
+      <select id="unidadeHospitalar" required>
+        <option value="">Selecione a Unidade</option>
+        <option value="Hospital Central">Hospital Central</option>
+        <option value="Unidade Zona Sul">Unidade Zona Sul</option>
+        <option value="Unidade Norte">Unidade Norte</option>
+      </select>
+
+      <!-- Campos de login -->
+      <input type="text" id="usuario" placeholder="Usuário" required />
+      <input type="password" id="senha" placeholder="Senha" required />
+
+      <!-- Botão de login -->
+      <button type="submit" class="login-btn">Entrar</button>
+    </form>
+
+    <!-- Link que direciona para a tela cadastro -->
+    <button class="register-btn" onclick="window.location.href='cadastro.html'">
+      Registrar / Primeiro Acesso
+    </button>
+  </div>
+
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', function (e) {
+      e.preventDefault(); // Impede o reload do formulário
+
+      const tipo = document.getElementById('tipoUsuario').value;
+      const unidade = document.getElementById('unidadeHospitalar').value;
+
+      // Verifica se todos os campos obrigatórios foram preenchidos
+      if (!tipo || !unidade) {
+        alert("Por favor, selecione o perfil e a unidade hospitalar.");
+        return;
+      }
+
+      // Salva unidade no localStorage para uso posterior
+      localStorage.setItem('unidadeSelecionada', unidade);
+
+      // Redireciona com base no tipo de usuário
+      switch (tipo) {
+        case 'paciente':
+          window.location.href = './paciente/paciente.html';
+          break;
+        case 'profissional':
+          window.location.href = './profissionaldesaude/profissional.html';
+          break;
+        case 'admin':
+          window.location.href = './administrador/admin.html';
+          break;
+        default:
+          alert("Perfil inválido!");
+      }
+    });
+  </script>
+</body>
+
+</html>

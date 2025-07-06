@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cadastro - VidaPlus</title>
+    <style>
+        /* Estilos da página */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Container do formulário */
+        .form-container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 450px;
+            width: 100%;
+        }
+
+        /* Estilo do título */
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #2c3e50;
+        }
+
+        /* Estilo das labels */
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        /* Estilo dos inputs e selects */
+        input,
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 6px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-sizing: border-box;
+        }
+
+        /* Container da senha com olho */
+        .senha-box {
+            position: relative;
+        }
+
+        /* Ajuste para inputs de senha */
+        .senha-box input[type="password"],
+        .senha-box input[type="text"] {
+            padding-right: 45px;
+        }
+
+        /* Estilo do ícone de mostrar/ocultar senha */
+        .senha-box .toggle-senha {
+            position: absolute;
+            top: 0;
+            right: 0;
+            height: 100%;
+            width: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 16px;
+            color: #555;
+        }
+
+        /* Estilo do botão principal */
+        button {
+            background-color: #007BFF;
+            color: white;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            width: 100%;
+            padding: 12px;
+            margin-top: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        /* Efeito hover do botão */
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Link de voltar */
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #007BFF;
+            text-decoration: none;
+        }
+
+        /* Efeito hover do link */
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Classe para esconder elementos */
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Container principal do formulário -->
+    <div class="form-container">
+        <h2>Cadastro VidaPlus</h2>
+        <form onsubmit="validarCadastro(event)">
+            <!-- Seleção de tipo de perfil -->
+            <label for="perfil">Tipo de Perfil</label>
+            <select id="perfil" required onchange="mostrarCamposEspecificos()">
+                <option value="">Selecione</option>
+                <option value="paciente">Paciente</option>
+                <option value="profissional">Profissional de Saúde</option>
+            </select>
+
+            <!-- Campos comuns a todos os perfis -->
+            <label for="nome">Nome completo</label>
+            <input type="text" id="nome" required />
+
+            <label for="email">E-mail</label>
+            <input type="email" id="email" required />
+
+            <!-- Campos específicos para pacientes (mostrados dinamicamente) -->
+            <div id="camposPaciente" class="hidden">
+                <label for="cpf">CPF</label>
+                <input type="text" id="cpf" placeholder="000.000.000-00" />
+                <label for="nascimento">Data de nascimento</label>
+                <input type="date" id="nascimento" />
+            </div>
+
+            <!-- Campos específicos para profissionais (mostrados dinamicamente) -->
+            <div id="camposProfissional" class="hidden">
+                <label for="crm">CRM</label>
+                <input type="text" id="crm" placeholder="123456-RS" />
+                <label for="especialidade">Especialidade</label>
+                <input type="text" id="especialidade" placeholder="Ex: Clínica Geral" />
+            </div>
+
+            <!-- Campos de autenticação -->
+            <label for="usuario">Usuário</label>
+            <input type="text" id="usuario" required />
+
+            <label for="senha">Senha</label>
+            <div class="senha-box">
+                <input type="password" id="senha" required />
+                <span class="toggle-senha" onclick="toggleSenha('senha')">👁️</span>
+            </div>
+
+            <label for="confirmar">Confirmar Senha</label>
+            <div class="senha-box">
+                <input type="password" id="confirmar" required />
+                <span class="toggle-senha" onclick="toggleSenha('confirmar')">👁️</span>
+            </div>
+
+            <!-- Botão de submit - agora com tamanho adequado -->
+            <button type="submit">Concluir Cadastro</button>
+        </form>
+
+        <a class="back-link" href="login.html">← Voltar para o Login</a>
+    </div>
+
+    <script>
+        /**
+         * Mostra campos específicos baseados no tipo de perfil selecionado
+         */
+        function mostrarCamposEspecificos() {
+            const perfil = document.getElementById("perfil").value;
+            // Primeiro esconde todos os campos específicos
+            document.getElementById("camposPaciente").classList.add("hidden");
+            document.getElementById("camposProfissional").classList.add("hidden");
+
+            // Mostra apenas os campos relevantes
+            if (perfil === "paciente") {
+                document.getElementById("camposPaciente").classList.remove("hidden");
+            } else if (perfil === "profissional") {
+                document.getElementById("camposProfissional").classList.remove("hidden");
+            }
+        }
+
+        /**
+         * Alterna entre mostrar/ocultar senha
+         * @param {string} campoId - ID do campo de senha
+         */
+        function toggleSenha(campoId) {
+            const campo = document.getElementById(campoId);
+            campo.type = campo.type === "password" ? "text" : "password";
+        }
+
+        /**
+         * Valida o formulário antes de enviar
+         * @param {Event} event - Evento de submit
+         */
+        function validarCadastro(event) {
+            event.preventDefault();
+            const senha = document.getElementById("senha").value;
+            const confirmar = document.getElementById("confirmar").value;
+
+            // Validação de tamanho da senha
+            if (senha.length < 6) {
+                alert("A senha deve ter no mínimo 6 caracteres.");
+                return;
+            }
+
+            // Validação de coincidência de senhas
+            if (senha !== confirmar) {
+                alert("As senhas não coincidem.");
+                return;
+            }
+
+            // Simulação de cadastro bem-sucedido
+            alert("Cadastro realizado com sucesso!");
+            window.location.href = "login.html";
+        }
+    </script>
+</body>
+</html>
