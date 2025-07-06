@@ -1,4 +1,5 @@
 Como executar o site e usar.
+coloque o projeto no visual studio ou de sua preferência
 
 Inicie a página login.html
 Faça login
